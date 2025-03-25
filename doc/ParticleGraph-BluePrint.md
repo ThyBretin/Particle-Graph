@@ -128,3 +128,12 @@ Particle-Graph/
 ├── .env                 # Shared env vars (e.g., API_TOKEN)
 ├── README.md            # Project overview
 └── .gitignore           # Exclusions (.env, node_modules)
+
+
+
+CloudFlare : 
+Your worker has access to the following bindings:
+- R2 Buckets:
+  - R2: particlegraph-data
+Particlegraph-worker: https://particlegraph-worker.thy-bretin.workers.dev
+Current Version ID: a43d9f38-555a-4dfb-8f57-bcfb5643f67f

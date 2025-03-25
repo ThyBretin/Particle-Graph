@@ -1,10 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './src/assets/react.svg'
-import viteLogo from '/vite.svg'
-import './screens/App.css'
+import { useState, useEffect } from "react";
+import reactLogo from "../assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [graph, setGraph] = useState(null);
+
+  useEffect(() => {
+    fetch("<worker-url>/loadGraph?path=test") // Replace with your Worker URL after deploy
+      .then((res) => res.json())
+      .then((data) => setGraph(data))
+      .catch((err) => console.error("Graph fetch failed:", err));
+  }, []);
 
   return (
     <>
@@ -21,15 +29,13 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <p>Graph: {graph ? graph.feature : "Loading..."}</p>
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          Edit <code>src/screens/Home.jsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
