@@ -7,12 +7,14 @@ function App() {
   const [count, setCount] = useState(0);
   const [graph, setGraph] = useState(null);
 
+  console.log("App component rendered"); // Mount check
+
   useEffect(() => {
-    fetch("<worker-url>/loadGraph?path=test") // Replace with your Worker URL after deploy
-      .then((res) => res.json())
-      .then((data) => setGraph(data))
-      .catch((err) => console.error("Graph fetch failed:", err));
+    console.log("useEffect running"); // Effect check
+    setGraph({ feature: "test" });
   }, []);
+
+  console.log("Current graph state:", graph); // State check
 
   return (
     <>
