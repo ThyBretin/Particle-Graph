@@ -1,30 +1,52 @@
-logs
+
+
+# Logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+# Node Modules (root, worker, pages)
+node_modules/
+worker/node_modules/
+pages/node_modules/
+
+# Build Artifacts (root, worker, pages)
+dist/
+dist-ssr/
+worker/dist/
+pages/dist/
+
+# Lock files (root, worker, pages)
+package-lock.json
 yarn.lock
-node_modules
-worker/node_modules
-pages/node_modules
-worker/dist
-pages/dist
-dist
-dist-ssr
-*.local
-.DS_Store
+worker/package-lock.json
+pages/package-lock.json
+
+# Environment and system files
 .env
-.vscode/*
+worker/.env
+pages/.env
+
+*.local
+worker/*.local
+pages/*.local
+
+.DS_Store
+worker/*.DS_Store
+pages/*.DS_Store
+.DS_Store
+
+# Editor settings
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-package-lock.json
-worker/package-lock.json
-pages/package-lock.json
 
