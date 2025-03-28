@@ -106,9 +106,10 @@ ParticleGraph: A cloud-native tool analyzing JavaScript codebases, generating co
 Particle-Graph/
 ├── worker/              # Cloudflare Workers codebase
 │   ├── src/
-│   │   ├── api/         # Worker endpoints (createGraph, loadGraph, etc.)
-│   │   ├── services/    # GitHub fetch, R2 ops, xAI calls
-│   │   └── utils/       # Helpers (PathResolver, gitignore parsing)
+│   │   ├── index.js
+│   │   ├── api/graph.js  # createGraph, loadGraph, etc.
+│   │   ├── services/babel.js  # Babel parsing
+│   │   └──utils/path.js  # PathResolver stub
 │   ├── tests/           # Worker tests
 │   ├── package.json     # Worker deps (babel, axios)
 │   └── wrangler.toml    # Worker config (account_id, R2 binding)
