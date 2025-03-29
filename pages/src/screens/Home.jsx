@@ -7,7 +7,9 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://particlegraph-worker.thy-bretin.workers.dev/loadGraph?path=demo")
+      .get("http://localhost:8787/loadGraph?path=demo", {
+        headers: { Authorization: "Bearer test-token" },
+      })
       .then((response) => {
         setGraph(response.data);
         console.log("Set graph:", response.data);
