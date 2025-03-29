@@ -50,3 +50,7 @@ pages/*.DS_Store
 *.sln
 *.sw?
 
+
+# wrangler.toml
+worker/wrangler.toml
+pages/wrangler.toml
