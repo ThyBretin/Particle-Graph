@@ -1,6 +1,15 @@
 name = "particlegraph-worker"
-compatibility_date = "2025-03-25"
 main = "src/index.js"
+compatibility_date = "2025-03-21"
+account_id = "08e74dc0680bffeb5e72e86ee9ca03e8"
+
+[vars]
+GITHUB_API = "https://api.github.com"
+
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "particlegraph-data"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "particlegraph-kv"
