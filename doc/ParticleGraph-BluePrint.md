@@ -8,6 +8,14 @@ ParticleGraph: A cloud-native tool analyzing JavaScript codebases, generating co
 - Optimize AI token usage through structured data.
 - Keep graphs and particles up-to-date with codebase changes.
 
+#### Focus 
+- MCP Priority: The Worker’s MCP endpoints (e.g., graphs://, superParticles://) need to be robust, accessible, and optimized for AI assistants in IDEs. This means fully implementing the blueprint’s MCP resources and ensuring they’re discoverable and usable by external clients.
+
+- Webapp Role: A lightweight UI for users to trigger graph creation and refine particles via chat. It’s an entry point, not the primary consumer of graphs/particles.
+
+- Auth Flexibility: We’ll keep auth in the webapp for now (since it’s working for GitHub integration), but design the Worker’s MCP endpoints to support future standalone auth (e.g., MCP-driven OAuth) without breaking the current flow.
+
+
 ### Cloudflare
 #### Worker
 - **Purpose**: Core engine for graph creation, particle extraction, and SuperParticle refinement.
@@ -22,6 +30,7 @@ ParticleGraph: A cloud-native tool analyzing JavaScript codebases, generating co
   - **/updateGraph (update_graph(projectId: string, graphName: string))**: Refreshes graph on commit.
   - **/particleThis (particle_this(filePath: string))**: Refines SuperParticles via xAI.
   - **/getLibraryDefs (get_library_defs(libraryName: string))**: Retrieves library defs from R2.
+  - **/showParticles (show_particles(projectId: string, filePath: string))**: Returns {filePath, type, hooks, calls, logic, depends_on, variables, functions, props, comments, flows}.
 - **Cache**: KV for hot graphs/particles, synced with R2.
 
 #### R2

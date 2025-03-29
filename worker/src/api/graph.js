@@ -1,37 +1,30 @@
-import { parse } from "@babel/parser";
+import { parseCode } from "../utils/parser.js";
+import { encrypt, decrypt } from "../utils/crypto.js";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // Allow all origins (or specific like "http://localhost:4173")
-  "Access-Control-Allow-Methods": "GET",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+export async function createGraph(request, r2, headers) {
+  const url = typeof request === "string" ? new URL(request) : new URL(request.url);
+  const token = request.token || request.headers.get("Authorization");
+  const path = url.searchParams.get("path") || request.path;
+  const projectId = url.searchParams.get("projectId") || request.projectId;
 
-export async function createGraph(request, r2) {
-  const url = new URL(request.url);
-  const path = url.searchParams.get("path") || "all";
-  const code = `function example() { console.log("Hello, ${path}!"); }`;
-  const ast = parse(code, { sourceType: "module" });
-  const files = { [`src/${path}.js`]: { type: "file", ast: ast.program.body } };
+  const { ast } = await parseCode({ filePath: path, projectId, token, env: request.env });
   const manifest = {
     feature: path,
-    files,
-    tech_stack: { react: "18.3.1" },
-    token_count: code.length,
+    files: { [path]: { type: path.endsWith(".jsx") || path.endsWith(".tsx") ? "component" : "file", ast: ast.program.body } },
+    token_count: ast.tokens.length,
   };
-  await r2.put(`${path}_graph.json`, JSON.stringify(manifest));
-  return new Response(JSON.stringify(manifest), {
-    headers: { "Content-Type": "application/json", ...corsHeaders },
-  });
+  const encrypted = encrypt(JSON.stringify(manifest), token);
+  await r2.put(`graphs/${projectId}/${path}.json`, encrypted);
+  return manifest;
 }
 
-export async function loadGraph(request, r2) {
-  const url = new URL(request.url);
-  const path = url.searchParams.get("path");
-  if (!path) return new Response("Missing path", { status: 400, headers: corsHeaders });
-  const obj = await r2.get(`${path}_graph.json`);
-  if (!obj) return new Response("Graph not found", { status: 404, headers: corsHeaders });
-  const data = await obj.text();
-  return new Response(data, {
-    headers: { "Content-Type": "application/json", ...corsHeaders },
-  });
+export async function loadGraph(request, r2, headers) {
+  const url = typeof request === "string" ? new URL(request) : new URL(request.url);
+  const token = request.token || request.headers.get("Authorization");
+  const projectId = url.searchParams.get("projectId") || request.projectId;
+  const graphName = url.searchParams.get("graphName") || request.graphName;
+  const obj = await r2.get(`graphs/${projectId}/${graphName}.json`);
+  const encrypted = obj ? await obj.text() : null;
+  const data = encrypted ? decrypt(encrypted, token) : null;
+  return data ? JSON.parse(data) : null;
 }
