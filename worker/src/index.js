@@ -1,6 +1,8 @@
 import { createGraph, loadGraph } from "./api/graph.js";
 import { particleThis } from "./api/particle.js";
 import { verifyToken } from "./api/auth.js";
+import { extractFactualMetadata } from "./api/factual_extractor.js";
+import { extractInferredMetadata } from "./api/inferred_extractor.js";
 
 export default {
   async fetch(request, env) {
@@ -43,6 +45,27 @@ export default {
     console.log("Token verified, proceeding...");
 
     // REST Endpoints
+    if (url.pathname === "/extractMetadata" && request.method === "POST") {
+      try {
+        const path = url.searchParams.get("path") || "home.jsx";
+        const r2Object = await env.R2.get(path);
+        if (!r2Object) {
+          return new Response("File not found in R2", { status: 404, headers: corsHeaders });
+        }
+        const content = await r2Object.text();
+        const factual = await extractFactualMetadata(content);
+        const inferred = await extractInferredMetadata(content);
+        const metadata = { factual, inferred };
+        return new Response(JSON.stringify(metadata, null, 2), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (e) {
+        console.log("Metadata extraction error:", e.message);
+        return new Response("Invalid content", { status: 400, headers: corsHeaders });
+      }
+    }
+
+
     if (url.pathname === "/createGraph" && request.method === "POST") {
       return await createGraph(request, env.R2, corsHeaders);
     }
