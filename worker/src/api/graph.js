@@ -9,9 +9,7 @@ export async function createGraph(projectId, path, env) {
 
   const githubToken = env.GITHUB_TOKEN || await env.KV.get("github:token");
   console.log("Fetched GitHub token:", githubToken ? "present" : "null");
-  if (!githubToken) {
-    throw new Error("GitHub token not configured");
-  }
+  if (!githubToken) throw new Error("GitHub token not configured");
 
   const repoUrl = `${env.GITHUB_API}/repos/${projectId}/contents${path ? `/${path}` : ""}`;
   let files;
@@ -19,7 +17,7 @@ export async function createGraph(projectId, path, env) {
     const response = await axios.get(repoUrl, {
       headers: {
         Authorization: `Bearer ${githubToken}`,
-        "User-Agent": "ParticleGraph-Worker/1.0" // Add this
+        "User-Agent": "ParticleGraph-Worker/1.0",
       },
     });
     console.log("GitHub API response:", response.data);
@@ -41,7 +39,9 @@ export async function createGraph(projectId, path, env) {
     } else {
       try {
         const { particle: parsedParticle } = await parseCode({ filePath, projectId, token: githubToken, env });
+        console.log("Parsed particle for", filePath, ":", parsedParticle); // Debug particle
         const content = parsedParticle.content || "console.log('mock');";
+        console.log("Content passed to extractors:", content.slice(0, 100)); // Debug content
         const factual = await extractFactualMetadata(content);
         const inferred = await extractInferredMetadata(content);
         particle = { ...parsedParticle, factual, inferred };
@@ -52,7 +52,7 @@ export async function createGraph(projectId, path, env) {
       }
     }
 
-    graph.files[filePath] = { type: filePath.endsWith(".jsx") ? "component" : "script", context: particle.inferred.potentialPurpose };
+    graph.files[filePath] = { type: particle.type, context: particle.inferred.potentialPurpose };
     graph.token_count += particle.factual?.length || 0;
   }
 

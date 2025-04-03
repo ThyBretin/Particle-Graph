@@ -1,3 +1,4 @@
+// worker/src/utils/parser.js
 import { parse } from "@babel/parser";
 import axios from "axios";
 
@@ -11,25 +12,25 @@ export async function parseCode({ filePath, projectId, token, env }) {
       },
     }
   );
-  const rawContent = atob(response.data.content);
+  const rawContent = atob(response.data.content); // Decode base64
 
   // Determine file type and plugins
   const hasTypeScriptSyntax =
-    code.includes(": ") ||
-    code.includes("<T>") ||
-    code.includes("interface ") ||
-    code.includes("type ") ||
+    rawContent.includes(": ") ||
+    rawContent.includes("<T>") ||
+    rawContent.includes("interface ") ||
+    rawContent.includes("type ") ||
     filePath.endsWith(".ts") ||
     filePath.endsWith(".tsx");
   const plugins = ["jsx", "decorators-legacy", hasTypeScriptSyntax ? "typescript" : "flow"];
-  const ast = parse(code, {
+  const ast = parse(rawContent, { // Use rawContent here
     sourceType: "module",
     plugins,
     tokens: true,
     comments: true,
   });
 
-  // Initialize particle (full structure from old code)
+  // Initialize particle
   const fileExt = filePath.split(".").pop();
   let particle = {
     path: filePath,
@@ -44,10 +45,11 @@ export async function parseCode({ filePath, projectId, token, env }) {
     state_machine: null,
     routes: [],
     comments: [],
-    used_by: [], // Placeholder for future dependency tracking
+    used_by: [],
+    content: rawContent, // Attach raw content explicitly
   };
 
-  // Extract comments
+  // Extract comments (unchanged)
   if (ast.comments && ast.comments.length > 0) {
     ast.comments.forEach((comment) => {
       const text = comment.value.trim().replace(/^\*+\s*/gm, "").replace(/\n\s*\*\s*/g, "\n");
@@ -62,11 +64,9 @@ export async function parseCode({ filePath, projectId, token, env }) {
     });
   }
 
-  // Walk AST (full logic from old code)
+  // Walk AST (unchanged - your existing logic)
   function walk(node) {
     if (!node) return;
-
-    // Props (top-level functions)
     if ((node.type === "FunctionDeclaration" || node.type === "ArrowFunctionExpression") && node.loc?.start.line <= 10) {
       node.params.forEach((param) => {
         if (param.type === "ObjectPattern") {
@@ -80,8 +80,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         }
       });
     }
-
-    // Hooks
     if (node.type === "CallExpression") {
       const callee = node.callee.name || (node.callee.property && `${node.callee.object?.name}.${node.callee.property.name}`);
       if (callee?.startsWith("use")) {
@@ -100,8 +98,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
           line: node.loc.start.line,
         });
       }
-
-      // API calls
       if (callee === "fetch" || node.callee.object?.name === "axios" || node.callee.object?.name === "supabase") {
         const args = node.arguments.map((arg) => (arg.type === "StringLiteral" ? arg.value : null)).filter(Boolean);
         particle.calls.push({
@@ -111,8 +107,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         });
       }
     }
-
-    // Depends On (imports)
     if (node.type === "ImportDeclaration") {
       const source = node.source.value;
       const specifiers = node.specifiers
@@ -127,15 +121,12 @@ export async function parseCode({ filePath, projectId, token, env }) {
         specifiers: specifiers.length > 0 ? specifiers : null,
       });
     }
-
     for (const key in node) if (node[key] && typeof node[key] === "object") walk(node[key]);
   }
 
-  // Enhance Walk (full logic from old code)
+  // Enhance Walk (unchanged - your existing logic)
   function enhanceWalk(node) {
     if (!node) return;
-
-    // Rich Props (from hooks)
     if (node.type === "VariableDeclarator" && node.init?.callee?.name?.startsWith("use")) {
       if (node.id?.type === "ObjectPattern") {
         node.id.properties.forEach((p) => {
@@ -167,8 +158,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         });
       }
     }
-
-    // Routes (navigation and definitions)
     if (node.type === "CallExpression") {
       const callee = node.callee.name || (node.callee.property && `${node.callee.object?.name}.${node.callee.property.name}`);
       if (callee && ["router.push", "router.replace", "navigate", "navigateToTab"].includes(callee)) {
@@ -181,7 +170,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         }
       }
     }
-
     if (
       node.type === "ObjectExpression" &&
       node.properties?.some((p) => p.key?.name === "path" || p.key?.name === "element")
@@ -199,8 +187,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         }
       }
     }
-
-    // JSX Elements
     if (node.type === "JSXElement") {
       const tag = node.openingElement?.name?.name;
       if (tag) {
@@ -226,8 +212,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         particle.jsx.push({ tag, ...attrs, line: node.loc.start.line });
       }
     }
-
-    // Logic (conditions)
     if (node.type === "IfStatement") {
       const test = node.test;
       let condition = "";
@@ -254,8 +238,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
         particle.logic.push({ condition, action, line: node.loc.start.line });
       }
     }
-
-    // State Machines
     if (node.type === "VariableDeclarator" && (node.id.name?.endsWith("_STATES") || node.id.name?.endsWith("States"))) {
       let states = [];
       if (node.init?.type === "ObjectExpression") {
@@ -273,18 +255,17 @@ export async function parseCode({ filePath, projectId, token, env }) {
         particle.state_machine = { name: `${reducerArg.name} (reducer)`, type: "reducer", line: node.loc.start.line };
       }
     }
-
     for (const key in node) if (node[key] && typeof node[key] === "object") enhanceWalk(node[key]);
   }
 
   walk(ast);
   enhanceWalk(ast);
 
-  // Filter empty fields (as in old code)
+  // Filter empty fields
   Object.keys(particle).forEach((key) => {
     if (Array.isArray(particle[key]) && particle[key].length === 0) delete particle[key];
     if (key === "state_machine" && (!particle[key] || (particle[key].states && particle[key].states.length === 0))) delete particle[key];
   });
-  particle.content = content; 
+
   return { ast, particle };
 }
