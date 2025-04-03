@@ -31,28 +31,32 @@ export async function createGraph(projectId, path, env) {
 
   for (const filePath of files) {
     const r2Key = `particles/${projectId}/${filePath}.json`;
-    const existing = await env.R2.get(r2Key);
-
     let particle;
+
+    const existing = await env.R2.get(r2Key);
     if (existing) {
       particle = JSON.parse(await existing.text());
+      console.log("Loaded existing particle for", filePath, ":", particle);
     } else {
       try {
         const { particle: parsedParticle } = await parseCode({ filePath, projectId, token: githubToken, env });
-        console.log("Parsed particle for", filePath, ":", parsedParticle); // Debug particle
+        console.log("Parsed particle for", filePath, ":", parsedParticle);
         const content = parsedParticle.content || "console.log('mock');";
-        console.log("Content passed to extractors:", content.slice(0, 100)); // Debug content
         const factual = await extractFactualMetadata(content);
         const inferred = await extractInferredMetadata(content);
         particle = { ...parsedParticle, factual, inferred };
         await env.R2.put(r2Key, JSON.stringify(particle));
+        console.log("Saved new particle for", filePath);
       } catch (e) {
         console.log("Particle creation error for", filePath, ":", e.message);
         continue;
       }
     }
 
-    graph.files[filePath] = { type: particle.type, context: particle.inferred.potentialPurpose };
+    graph.files[filePath] = {
+      type: particle.type,
+      context: particle.inferred.potentialPurpose,
+    };
     graph.token_count += particle.factual?.length || 0;
   }
 
