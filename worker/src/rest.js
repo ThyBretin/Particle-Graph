@@ -44,13 +44,27 @@ export async function handleRestRequest(request, env) {
     console.log("testKV - KV value:", kvValue);
     return new Response(kvValue || "KV not found", { headers: corsHeaders });
   }
+  // New test endpoint
+  if (url.pathname === "/testGithubToken" && request.method === "GET") {
+    const githubToken = await env.KV.get("github:token");
+    console.log("Test GitHub token fetch:", githubToken ? "present" : "null");
+    return new Response(githubToken || "No token found", { headers: corsHeaders });
+  }
+  // list KV keys (for debugging)
+  if (url.pathname === "/listKV" && request.method === "GET") {
+    const kvList = await env.KV.list();
+    console.log("KV keys:", kvList.keys);
+    return new Response(JSON.stringify(kvList.keys), { headers: corsHeaders });
+  }
 
   const authResponse = await authenticate(request, env);
   if (authResponse) return authResponse;
 
   if (url.pathname === "/createGraph" && request.method === "POST") {
     try {
-      const { projectId, path } = await request.json();
+      const body = await request.json();
+      console.log("createGraph request body:", body);
+      const { projectId, path } = body;
       if (!projectId) {
         return new Response("Missing projectId", { status: 400, headers: corsHeaders });
       }
@@ -60,7 +74,7 @@ export async function handleRestRequest(request, env) {
       });
     } catch (e) {
       console.log("createGraph error:", e.message);
-      return new Response("Failed to create graph", { status: 500, headers: corsHeaders });
+      return new Response(`Failed to create graph: ${e.message}`, { status: 500, headers: corsHeaders });
     }
   }
 

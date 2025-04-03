@@ -2,12 +2,16 @@ import { parse } from "@babel/parser";
 import axios from "axios";
 
 export async function parseCode({ filePath, projectId, token, env }) {
-  // Fetch code from GitHub
   const response = await axios.get(
     `https://api.github.com/repos/${projectId}/contents/${filePath}`,
-    { headers: { Authorization: `Bearer ${token}` } }
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "User-Agent": "ParticleGraph-Worker/1.0",
+      },
+    }
   );
-  const code = atob(response.data.content);
+  const rawContent = atob(response.data.content);
 
   // Determine file type and plugins
   const hasTypeScriptSyntax =
@@ -281,6 +285,6 @@ export async function parseCode({ filePath, projectId, token, env }) {
     if (Array.isArray(particle[key]) && particle[key].length === 0) delete particle[key];
     if (key === "state_machine" && (!particle[key] || (particle[key].states && particle[key].states.length === 0))) delete particle[key];
   });
-
+  particle.content = content; 
   return { ast, particle };
 }
