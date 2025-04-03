@@ -1,3 +1,4 @@
+// src/rest.js
 import { createGraph, loadGraph } from "./api/graph.js";
 import { particleThis } from "./api/particle.js";
 import { verifyToken } from "./api/auth.js";
@@ -44,13 +45,11 @@ export async function handleRestRequest(request, env) {
     console.log("testKV - KV value:", kvValue);
     return new Response(kvValue || "KV not found", { headers: corsHeaders });
   }
-  // New test endpoint
   if (url.pathname === "/testGithubToken" && request.method === "GET") {
     const githubToken = await env.KV.get("github:token");
     console.log("Test GitHub token fetch:", githubToken ? "present" : "null");
     return new Response(githubToken || "No token found", { headers: corsHeaders });
   }
-  // list KV keys (for debugging)
   if (url.pathname === "/listKV" && request.method === "GET") {
     const kvList = await env.KV.list();
     console.log("KV keys:", kvList.keys);
@@ -64,11 +63,11 @@ export async function handleRestRequest(request, env) {
     try {
       const body = await request.json();
       console.log("createGraph request body:", body);
-      const { projectId, path } = body;
+      const { projectId, path, start = 0, limit = 50 } = body;
       if (!projectId) {
         return new Response("Missing projectId", { status: 400, headers: corsHeaders });
       }
-      const graphData = await createGraph(projectId, path, env);
+      const graphData = await createGraph(projectId, path, env, start, limit);
       return new Response(JSON.stringify(graphData, null, 2), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -98,8 +97,22 @@ export async function handleRestRequest(request, env) {
     }
   }
 
-  if (url.pathname === "/loadGraph" && request.method === "GET") {
-    return await loadGraph(request, env.R2, corsHeaders);
+  if (url.pathname === "/loadGraph" && request.method === "POST") { // Change to POST
+    try {
+      const body = await request.json();
+      console.log("loadGraph request body:", body);
+      const { projectId, graphName } = body;
+      if (!projectId) {
+        return new Response("Missing projectId", { status: 400, headers: corsHeaders });
+      }
+      const graph = await loadGraph(projectId, graphName, env);
+      return new Response(JSON.stringify(graph, null, 2), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } catch (e) {
+      console.log("loadGraph error:", e.message);
+      return new Response(`Graph not found: ${e.message}`, { status: 404, headers: corsHeaders });
+    }
   }
 
   if (url.pathname === "/listGraph" && request.method === "GET") {
@@ -115,7 +128,21 @@ export async function handleRestRequest(request, env) {
   }
 
   if (url.pathname === "/particleThis" && request.method === "POST") {
-    return await particleThis(request, env.R2, corsHeaders);
+    try {
+      const body = await request.json();
+      console.log("particleThis request body:", body);
+      const { projectId, filePath, input } = body;
+      if (!projectId || !filePath) {
+        return new Response("Missing projectId or filePath", { status: 400, headers: corsHeaders });
+      }
+      const result = await particleThis(projectId, filePath, input, env);
+      return new Response(JSON.stringify(result, null, 2), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } catch (e) {
+      console.log("particleThis error:", e.message);
+      return new Response(`Error: ${e.message}`, { status: 500, headers: corsHeaders });
+    }
   }
 
   if (url.pathname === "/getLibraryDefs" && request.method === "GET") {

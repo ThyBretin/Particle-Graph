@@ -44,7 +44,7 @@
 
 ## Phase 5: Webapp & MCP Polish (Week 5)
 ### Webapp (pages/src/):
-- Update Home.jsx for repo selection and chat UI.
+- Update Home.jsx for repo selection and chat UI. (That's is now UserPage)
 - Add REST calls to trigger Worker endpoints.
 
 ### MCP:

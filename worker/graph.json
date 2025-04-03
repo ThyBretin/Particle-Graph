@@ -1,0 +1,206 @@
+{
+  "feature": "Repo Graph",
+  "files": {
+    "app/(auth)/_layout.jsx": {
+      "type": "component",
+      "context": "Utility script"
+    },
+    "app/(auth)/forgot.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(auth)/login.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(auth)/register.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/_layout.jsx": {
+      "type": "component",
+      "context": "Utility script"
+    },
+    "app/(aux)/hub/_layout.jsx": {
+      "type": "component",
+      "context": "Utility script"
+    },
+    "app/(aux)/hub/attendee/faq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/hub/attendee/terms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/hub/organizer/faq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/hub/organizer/terms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/hub/venue/faq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(aux)/hub/venue/terms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(modals)/_layout.jsx": {
+      "type": "component",
+      "context": "Utility script"
+    },
+    "app/(modals)/search.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/_layout.jsx": {
+      "type": "component",
+      "context": "Utility script"
+    },
+    "app/(routes)/attendee/_layout.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/attendee/profile.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/attendee/tickets.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/business/_layout.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/business/account.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(routes)/business/qrscanner.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(shared)/_layout.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(shared)/chat.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(shared)/discovery.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/(shared)/event/[id].js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "app/_layout.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "app/error.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "babel.config.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Auth/components/ForgotPasswordForm.jsx": {
+      "type": "component",
+      "context": "unknown"
+    },
+    "components/Core/Auth/components/LoginForm.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/Auth/components/RegisterForm.jsx": {
+      "type": "component",
+      "context": "unknown"
+    },
+    "components/Core/Auth/components/ResetPasswordForm.jsx": {
+      "type": "component",
+      "context": "unknown"
+    },
+    "components/Core/Auth/guards/AuthGuard.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/Auth/guards/AuthRoleGuard.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/Auth/hooks/useAuth.js": {
+      "type": "file",
+      "context": "unknown"
+    },
+    "components/Core/Auth/providers/AuthProvider.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/Auth/state/auth.store.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/coordinator/DomainRegistry.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/coordinator/StateCoordinator.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/coordinator/TransactionManager.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/coordinator/ValidationEngine.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/state/eventState.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/state/qrState.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Middleware/state/ticketState.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Role/_test_/RoleGuard.test.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/Role/_test_/roles.test.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Role/_test_/useRole.test.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/Role/config/roles.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Role/guards/RoleGuard.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/Role/hooks/useRole.js": {
+      "type": "file",
+      "context": "Utility script"
+    }
+  },
+  "token_count": 117361
+}
