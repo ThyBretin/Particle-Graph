@@ -1,5 +1,5 @@
 // worker/src/api/inferred_extractor.js
-export async function extractInferredMetadata(content) {
+export async function extractInferredMetadata(content, filePath) { // Add filePath param
   console.log("Inferred content snippet:", content.slice(0, 100));
   const metadata = { imports: [], functions: [], potentialPurpose: "unknown" };
 
@@ -17,7 +17,7 @@ export async function extractInferredMetadata(content) {
   console.log("Checking keywords...");
   if (content.includes("axios") || content.includes("fetch")) {
     metadata.potentialPurpose = "HTTP request handler";
-  } else if (filePath && filePath.includes("_layout.jsx")) { // Add filePath param
+  } else if (filePath && filePath.includes("_layout.jsx")) {
     console.log("Detected Expo layout");
     metadata.potentialPurpose = "Expo route";
   } else if (

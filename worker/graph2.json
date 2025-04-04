@@ -1,0 +1,207 @@
+{
+  "feature": "Repo Graph",
+  "files": {
+    "components/Core/Role/utils/mockUtils.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Core/Role/utils/roleUtils.js": {
+      "type": "file",
+      "context": "unknown"
+    },
+    "components/Core/UI/List/ChatList.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/UI/List/EventFeedList.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/UI/List/ListView.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/UI/List/OrganizerFeedList.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/UI/TodayLogo.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/navigation/_tests_/NavigationBar.styles.test.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/navigation/_tests_/NavigationBar.test.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/navigation/components/NavigationBar.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Core/navigation/hooks/useNavigation.js": {
+      "type": "file",
+      "context": "React component"
+    },
+    "components/Core/navigation/state/navigation.store.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Features/Events/components/EventCard.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/EventPage.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/feed/EventFeed.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/feed/EventTypeSelector.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/feed/FeedDisplay.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/AgeRange.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventDate.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventDescription.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventImage.jsx": {
+      "type": "component",
+      "context": "HTTP request handler"
+    },
+    "components/Features/Events/components/shared/EventLocation.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventPrice.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventStage.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventStatus.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/EventTitle.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/HeroDisplay.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/JoinNowBtn.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Events/components/shared/ShareEventBtn.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Attendee/AttendeeFaq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Attendee/AttendeeGuide.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Attendee/AttendeeTerms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Attendee/HowToAttend.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Organizer/HowToOrganize.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Organizer/OrganizerFaq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Organizer/OrganizerGuide.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Organizer/OrganizerTerms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Venue/HowToHost.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Venue/VenueFaq.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Venue/VenueGuide.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/Venue/VenueTerms.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/components/shared/HubContent.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Hub/mocks/attendee.data.js": {
+      "type": "file",
+      "context": "unknown"
+    },
+    "components/Features/Hub/mocks/organizer.data.js": {
+      "type": "file",
+      "context": "unknown"
+    },
+    "components/Features/Hub/mocks/venue.data.js": {
+      "type": "file",
+      "context": "unknown"
+    },
+    "components/Features/Hub/state/hub.store.js": {
+      "type": "file",
+      "context": "Utility script"
+    },
+    "components/Features/Profile/components/AttendeeProfileView.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Profile/components/BusinessProfileView.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Profile/components/ProfileMenu.jsx": {
+      "type": "component",
+      "context": "React component"
+    },
+    "components/Features/Profile/hooks/useProfile.js": {
+      "type": "file",
+      "context": "unknown"
+    }
+  },
+  "token_count": 76635,
+  "progress": "100/126"
+}

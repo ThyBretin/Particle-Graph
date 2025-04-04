@@ -63,11 +63,11 @@ export async function handleRestRequest(request, env) {
     try {
       const body = await request.json();
       console.log("createGraph request body:", body);
-      const { projectId, path, start = 0, limit = 50 } = body;
+      const { projectId, path, start = 0, limit = 50 } = body; // Add start, limit
       if (!projectId) {
         return new Response("Missing projectId", { status: 400, headers: corsHeaders });
       }
-      const graphData = await createGraph(projectId, path, env, start, limit);
+      const graphData = await createGraph(projectId, path, env, start, limit); // Pass them
       return new Response(JSON.stringify(graphData, null, 2), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

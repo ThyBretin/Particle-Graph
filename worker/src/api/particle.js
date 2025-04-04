@@ -1,6 +1,6 @@
 import { parseCode } from "../utils/parser.js";
-import { extractFactualMetadata } from "./factual_extractor.js"; // Fix: "./" not "../utils/"
-import { extractInferredMetadata } from "./inferred_extractor.js"; 
+import { extractFactualMetadata } from "./factual_extractor.js";
+import { extractInferredMetadata } from "./inferred_extractor.js";
 
 export async function processParticle(filePath, projectId, token, env) {
   const r2Key = `particles/${projectId}/${filePath}.json`;
@@ -14,7 +14,7 @@ export async function processParticle(filePath, projectId, token, env) {
     const { particle: parsedParticle } = await parseCode({ filePath, projectId, token, env });
     const content = parsedParticle.content || "console.log('mock');";
     const factual = await extractFactualMetadata(content);
-    const inferred = await extractInferredMetadata(content, filePath); // Pass filePath
+    const inferred = await extractInferredMetadata(content, filePath); // Add filePath here
     const particle = { ...parsedParticle, factual, inferred };
     await env.R2.put(r2Key, JSON.stringify(particle));
     console.log("Saved new particle for", filePath);

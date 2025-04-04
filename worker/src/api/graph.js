@@ -1,12 +1,13 @@
+// src/api/graph.js
 import { fetchFiles } from "./crawler.js";
 import { processParticle } from "./particle.js";
 
-export async function createGraph(projectId, path, env) {
+export async function createGraph(projectId, path, env, start = 0, limit = 50) { // Add start, limit
   const githubToken = env.GITHUB_TOKEN || await env.KV.get("github:token");
   console.log("Fetched GitHub token:", githubToken ? "present" : "null");
   if (!githubToken) throw new Error("GitHub token not configured");
 
-  const files = await fetchFiles(projectId, githubToken, 50);
+  const { files, total } = await fetchFiles(projectId, githubToken, start, limit); // Destructure
   const graph = { feature: "Repo Graph", files: {}, token_count: 0 };
   let processed = 0;
 
@@ -23,7 +24,7 @@ export async function createGraph(projectId, path, env) {
   const graphKey = `graphs/${projectId}/${path || "full_repo"}.json`;
   await env.R2.put(graphKey, JSON.stringify(graph));
   console.log("Graph created:", graph);
-  return graph;
+  return { ...graph, progress: `${start + processed}/${total}` }; // Add progress
 }
 
 export async function loadGraph(projectId, graphName, env) {
